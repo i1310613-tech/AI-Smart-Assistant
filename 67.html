@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>智慧生活AI助手</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Noto Sans TC', sans-serif;
+}
+
+body{
+    width:100%;
+    height:100vh;
+    overflow:hidden;
+    background:
+    linear-gradient(135deg,#dbeafe,#eff6ff,#ffffff);
+}
+
+/* 背景光暈 */
+
+body::before{
+    content:"";
+    position:absolute;
+    width:500px;
+    height:500px;
+    background:#60a5fa;
+    border-radius:50%;
+    filter:blur(150px);
+    top:-150px;
+    left:-100px;
+    opacity:0.35;
+}
+
+body::after{
+    content:"";
+    position:absolute;
+    width:500px;
+    height:500px;
+    background:#a78bfa;
+    border-radius:50%;
+    filter:blur(150px);
+    bottom:-200px;
+    right:-100px;
+    opacity:0.35;
+}
+
+/* 主容器 */
+
+.container{
+    position:relative;
+    z-index:1;
+    width:100%;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+/* 導覽列 */
+
+.navbar{
+    width:100%;
+    height:85px;
+    backdrop-filter:blur(20px);
+    background:rgba(255,255,255,0.65);
+    border-bottom:1px solid rgba(255,255,255,0.4);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 50px;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:700;
+    color:#2563eb;
+}
+
+.nav-links{
+    display:flex;
+    gap:40px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#1e293b;
+    font-size:18px;
+    font-weight:500;
+    transition:0.3s;
+    position:relative;
+}
+
+.nav-links a:hover{
+    color:#2563eb;
+}
+
+.nav-links a::after{
+    content:"";
+    position:absolute;
+    width:0%;
+    height:3px;
+    background:#2563eb;
+    left:0;
+    bottom:-8px;
+    border-radius:10px;
+    transition:0.3s;
+}
+
+.nav-links a:hover::after{
+    width:100%;
+}
+
+/* 主畫面 */
+
+.main{
+    flex:1;
+    display:flex;
+    overflow:hidden;
+}
+
+/* 側邊欄 */
+
+.sidebar{
+    width:290px;
+    padding:30px 20px;
+
+    backdrop-filter:blur(20px);
+    background:rgba(255,255,255,0.45);
+
+    border-right:1px solid rgba(255,255,255,0.4);
+}
+
+.sidebar-title{
+    font-size:24px;
+    font-weight:700;
+    margin-bottom:25px;
+    color:#1e293b;
+}
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.menu button{
+    padding:18px;
+    border:none;
+    border-radius:18px;
+    background:rgba(255,255,255,0.75);
+
+    font-size:17px;
+    font-weight:500;
+
+    cursor:pointer;
+    transition:0.35s;
+
+    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+}
+
+.menu button:hover{
+    transform:translateY(-5px) scale(1.03);
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+    color:white;
+    box-shadow:0 15px 30px rgba(37,99,235,0.3);
+}
+
+/* 中間內容 */
+
+.content{
+    flex:1;
+    padding:40px;
+    overflow:auto;
+}
+
+/* 卡片共用 */
+
+.card{
+    background:rgba(255,255,255,0.72);
+    backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,0.5);
+
+    border-radius:30px;
+
+    box-shadow:
+    0 10px 40px rgba(0,0,0,0.08);
+
+    margin-bottom:30px;
+}
+
+/* 歡迎區 */
+
+.welcome{
+    padding:40px;
+}
+
+.welcome h1{
+    font-size:42px;
+    margin-bottom:15px;
+    color:#0f172a;
+}
+
+.welcome p{
+    font-size:18px;
+    color:#475569;
+    line-height:1.8;
+}
+
+/* 輸入區 */
+
+.input-area{
+    padding:35px;
+}
+
+textarea{
+    width:100%;
+    height:170px;
+
+    border:none;
+    outline:none;
+
+    padding:25px;
+
+    border-radius:25px;
+
+    background:#f8fafc;
+
+    font-size:18px;
+
+    resize:none;
+
+    box-shadow:inset 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.action-bar{
+    margin-top:25px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.tools{
+    display:flex;
+    gap:15px;
+}
+
+.tool-btn{
+    padding:12px 20px;
+    border:none;
+    border-radius:14px;
+
+    background:#eef2ff;
+
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.tool-btn:hover{
+    background:#dbeafe;
+}
+
+/* 生成按鈕 */
+
+.generate-btn{
+    border:none;
+
+    padding:16px 40px;
+
+    border-radius:18px;
+
+    font-size:20px;
+    font-weight:700;
+
+    color:white;
+
+    background:
+    linear-gradient(135deg,#22c55e,#16a34a);
+
+    cursor:pointer;
+
+    transition:0.35s;
+
+    box-shadow:
+    0 10px 25px rgba(34,197,94,0.3);
+}
+
+.generate-btn:hover{
+    transform:translateY(-4px) scale(1.04);
+
+    box-shadow:
+    0 20px 35px rgba(34,197,94,0.4);
+}
+
+/* 結果區 */
+
+.result-card{
+    padding:35px;
+}
+
+.result-title{
+    font-size:28px;
+    font-weight:700;
+    margin-bottom:25px;
+    color:#111827;
+}
+
+.result-box{
+    background:#f8fafc;
+
+    padding:30px;
+
+    border-radius:24px;
+
+    line-height:2;
+
+    color:#334155;
+
+    font-size:17px;
+}
+
+/* 頁尾 */
+
+.footer{
+    height:70px;
+
+    backdrop-filter:blur(20px);
+    background:rgba(255,255,255,0.55);
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:#475569;
+
+    font-size:15px;
+}
+
+/* 滾動條 */
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#cbd5e1;
+    border-radius:20px;
+}
+
+/* 手機版 */
+
+@media(max-width:900px){
+
+    body{
+        overflow:auto;
+    }
+
+    .main{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+    }
+
+    .navbar{
+        padding:0 20px;
+    }
+
+    .nav-links{
+        display:none;
+    }
+
+    .content{
+        padding:20px;
+    }
+
+    .welcome h1{
+        font-size:30px;
+    }
+
+    .action-bar{
+        flex-direction:column;
+        gap:20px;
+    }
+
+    .generate-btn{
+        width:100%;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- 導覽列 -->
+
+    <div class="navbar">
+
+        <div class="logo">
+            🤖 智慧生活AI助手
+        </div>
+
+        <div class="nav-links">
+            <a href="#">首頁</a>
+            <a href="#">功能</a>
+            <a href="#">歷史紀錄</a>
+            <a href="#">設定</a>
+        </div>
+
+    </div>
+
+    <!-- 主畫面 -->
+
+    <div class="main">
+
+        <!-- 側邊欄 -->
+
+        <div class="sidebar">
+
+            <div class="sidebar-title">
+                ⚡ 快速功能
+            </div>
+
+            <div class="menu">
+
+                <button>📅 行程規劃</button>
+
+                <button>📝 筆記整理</button>
+
+                <button>📚 學習助手</button>
+
+                <button>🔍 資料查詢</button>
+
+                <button>💡 AI建議</button>
+
+            </div>
+
+        </div>
+
+        <!-- 內容 -->
+
+        <div class="content">
+
+            <!-- 歡迎區 -->
+
+            <div class="card welcome">
+
+                <h1>
+                    您好！我是您的智慧AI助手 👋
+                </h1>
+
+                <p>
+                    我可以幫助您整理資訊、規劃行程、
+                    提供建議與提升學習效率，
+                    讓您的生活更加方便與智慧化。
+                </p>
+
+            </div>
+
+            <!-- 輸入區 -->
+
+            <div class="card input-area">
+
+                <textarea placeholder="請輸入您的問題或需求..."></textarea>
+
+                <div class="action-bar">
+
+                    <div class="tools">
+
+                        <button class="tool-btn">
+                            📎 上傳檔案
+                        </button>
+
+                        <button class="tool-btn">
+                            💬 範例問題
+                        </button>
+
+                    </div>
+
+                    <button class="generate-btn">
+                        ✨ 生成內容
+                    </button>
+
+                </div>
+
+            </div>
+
+            <!-- 結果區 -->
+
+            <div class="card result-card">
+
+                <div class="result-title">
+                    📋 AI 回應結果
+                </div>
+
+                <div class="result-box">
+
+                    • 幫您整理重點資訊<br>
+                    • 提供最佳行程規劃<br>
+                    • 自動生成學習建議<br>
+                    • 快速提升工作效率
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- 頁尾 -->
+
+    <div class="footer">
+        © 2026 智慧生活AI助手 | AI Smart Assistant
+    </div>
+
+</div>
+<script>
+// ===================== 基本元素 =====================
+const textarea = document.querySelector("textarea");
+const resultBox = document.querySelector(".result-box");
+const generateBtn = document.querySelector(".generate-btn");
+const menuBtns = document.querySelectorAll(".menu button");
+const toolBtns = document.querySelectorAll(".tool-btn");
+const navLinks = document.querySelectorAll(".nav-links a");
+
+// ===================== 歷史紀錄 =====================
+let history = [];
+
+// ===================== AI核心 =====================
+function generateAI(text){
+
+    return `
+<b>🧠 AI分析：</b><br>
+${text}<br><br>
+
+<b>📌 解決方式：</b><br>
+1. 先理解問題<br>
+2. 拆解步驟<br>
+3. 逐步執行<br><br>
+
+<b>🎯 結論：</b><br>
+透過一步一步做，可以解決問題。
+`;
+}
+
+// ===================== 生成按鈕 =====================
+generateBtn.onclick = () => {
+
+    const text = textarea.value.trim();
+    if(!text){
+        resultBox.innerHTML = "請輸入問題";
+        return;
+    }
+
+    history.push(text);
+    resultBox.innerHTML = generateAI(text);
+};
+
+// ===================== 側邊欄功能 =====================
+
+menuBtns[0].onclick = () => {
+    resultBox.innerHTML = `
+<b>📅 行程規劃</b><br><br>
+✔ 早上：主要活動<br>
+✔ 中午：休息吃飯<br>
+✔ 下午：自由活動<br>
+✔ 晚上：整理回顧<br><br>
+<b>建議：</b>不要排太滿
+`;
+};
+
+menuBtns[1].onclick = () => {
+    resultBox.innerHTML = `
+<b>📝 筆記整理</b><br><br>
+✔ 標題清楚<br>
+✔ 重點條列<br>
+✔ 刪掉廢話<br><br>
+<b>方法：</b>關鍵字整理
+`;
+};
+
+menuBtns[2].onclick = () => {
+    resultBox.innerHTML = `
+<b>📚 學習助手</b><br><br>
+✔ 每天學一點<br>
+✔ 先理解再記<br>
+✔ 多練習<br><br>
+<b>核心：</b>持續比速度重要
+`;
+};
+
+menuBtns[3].onclick = () => {
+    resultBox.innerHTML = `
+<b>🔍 資料查詢</b><br><br>
+✔ 找關鍵字<br>
+✔ 多來源比較<br>
+✔ 確認正確性<br>
+`;
+};
+
+menuBtns[4].onclick = () => {
+    resultBox.innerHTML = `
+<b>💡 AI建議</b><br><br>
+✔ 拆解問題<br>
+✔ 一步一步做<br>
+✔ 不懂就調整方法<br>
+`;
+};
+
+// ===================== 上方導航功能 =====================
+
+// 首頁
+navLinks[0].onclick = (e) => {
+    e.preventDefault();
+    resultBox.innerHTML = "🏠 已回到首頁";
+};
+
+// 功能
+navLinks[1].onclick = (e) => {
+    e.preventDefault();
+    resultBox.innerHTML = `
+<b>⚙️ 系統功能</b><br><br>
+✔ AI問答<br>
+✔ 行程規劃<br>
+✔ 筆記整理<br>
+✔ 學習助手<br>
+✔ 資料查詢<br>
+`;
+};
+
+// 歷史紀錄
+navLinks[2].onclick = (e) => {
+    e.preventDefault();
+
+    if(history.length === 0){
+        resultBox.innerHTML = "📜 尚無歷史紀錄";
+        return;
+    }
+
+    let html = "<b>📜 歷史紀錄：</b><br><br>";
+
+    history.forEach((item,i)=>{
+        html += `${i+1}. ${item}<br>`;
+    });
+
+    resultBox.innerHTML = html;
+};
+
+// 設定
+navLinks[3].onclick = (e) => {
+    e.preventDefault();
+    resultBox.innerHTML = `
+<b>⚙️ 設定</b><br><br>
+✔ 系統已最佳化<br>
+✔ AI模式已開啟<br>
+✔ 歷史紀錄已啟用<br>
+`;
+};
+
+// ===================== 工具按鈕 =====================
+
+// 上傳檔案
+toolBtns[0].onclick = () => {
+    resultBox.innerHTML = "📎 上傳功能（模擬）：目前尚未連接伺服器，但功能已啟用";
+};
+
+// 範例問題
+toolBtns[1].onclick = () => {
+
+    textarea.value = "怎麼學好程式？";
+
+    resultBox.innerHTML = `
+💬 範例已填入輸入框<br><br>
+👉 可以點「生成內容」測試
+`;
+};
+
+</script></body>
+</html>
