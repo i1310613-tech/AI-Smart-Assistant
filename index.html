@@ -531,362 +531,206 @@ textarea{
 </div>
 <script>
 
-// ===================== 基本元素 =====================
-const textarea = document.querySelector("textarea");
-const resultBox = document.querySelector(".result-box");
-const generateBtn = document.querySelector(".generate-btn");
-const menuBtns = document.querySelectorAll(".menu button");
-const toolBtns = document.querySelectorAll(".tool-btn");
-const navLinks = document.querySelectorAll(".nav-links a");
+// ===================== AI 設定 =====================
 
-// ===================== 歷史紀錄 =====================
-let history = [];
+let aiSettings = {
+    tone: "普通",
+    language: "繁體中文"
+};
 
-// ===================== AI 回覆核心 =====================
-function generateAI(text){
+// 取得右上角「設定」
+const settingBtn = document.querySelectorAll(".nav-links a")[3];
 
-    // HTML問題
-    if(text.includes("html")){
+// ===================== 建立設定視窗 =====================
 
+const settingPanel = document.createElement("div");
+
+settingPanel.style.position = "fixed";
+settingPanel.style.top = "0";
+settingPanel.style.left = "0";
+settingPanel.style.width = "100%";
+settingPanel.style.height = "100%";
+settingPanel.style.background = "rgba(0,0,0,0.45)";
+settingPanel.style.display = "none";
+settingPanel.style.justifyContent = "center";
+settingPanel.style.alignItems = "center";
+settingPanel.style.zIndex = "99999";
+
+settingPanel.innerHTML = `
+
+<div style="
+    width:420px;
+    background:white;
+    border-radius:25px;
+    padding:30px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.2);
+">
+
+    <h2 style="
+        margin-bottom:25px;
+        color:#111827;
+    ">
+        ⚙️ AI 設定
+    </h2>
+
+    <!-- 語氣 -->
+    <div style="margin-bottom:25px;">
+
+        <div style="
+            font-size:16px;
+            margin-bottom:10px;
+            font-weight:700;
+        ">
+            🗣️ AI 說話語氣
+        </div>
+
+        <select id="toneSelect" style="
+            width:100%;
+            padding:12px;
+            border-radius:12px;
+            border:1px solid #d1d5db;
+            font-size:15px;
+        ">
+            <option>普通</option>
+            <option>專業</option>
+            <option>輕鬆</option>
+            <option>熱情</option>
+            <option>簡短</option>
+        </select>
+
+    </div>
+
+    <!-- 語言 -->
+    <div style="margin-bottom:25px;">
+
+        <div style="
+            font-size:16px;
+            margin-bottom:10px;
+            font-weight:700;
+        ">
+            🌐 回覆語言
+        </div>
+
+        <select id="langSelect" style="
+            width:100%;
+            padding:12px;
+            border-radius:12px;
+            border:1px solid #d1d5db;
+            font-size:15px;
+        ">
+            <option>繁體中文</option>
+            <option>English</option>
+            <option>日本語</option>
+        </select>
+
+    </div>
+
+    <!-- 儲存 -->
+    <button id="saveSetting" style="
+        width:100%;
+        padding:14px;
+        border:none;
+        border-radius:14px;
+        background:linear-gradient(135deg,#2563eb,#7c3aed);
+        color:white;
+        font-size:16px;
+        font-weight:700;
+        cursor:pointer;
+    ">
+        💾 儲存設定
+    </button>
+
+</div>
+`;
+
+document.body.appendChild(settingPanel);
+
+// ===================== 打開設定 =====================
+
+settingBtn.addEventListener("click",(e)=>{
+
+    e.preventDefault();
+
+    settingPanel.style.display = "flex";
+});
+
+// ===================== 點背景關閉 =====================
+
+settingPanel.addEventListener("click",(e)=>{
+
+    if(e.target === settingPanel){
+        settingPanel.style.display = "none";
+    }
+});
+
+// ===================== 儲存設定 =====================
+
+document.addEventListener("click",(e)=>{
+
+    if(e.target.id === "saveSetting"){
+
+        aiSettings.tone =
+        document.getElementById("toneSelect").value;
+
+        aiSettings.language =
+        document.getElementById("langSelect").value;
+
+        settingPanel.style.display = "none";
+
+        document.querySelector(".result-box").innerHTML = `
+        <b>⚙️ 設定已儲存</b><br><br>
+
+        🗣️ AI語氣：
+        ${aiSettings.tone}<br><br>
+
+        🌐 回覆語言：
+        ${aiSettings.language}<br><br>
+
+        之後 AI 將依照你的設定進行回覆。
+        `;
+    }
+});
+
+// ===================== AI語氣系統 =====================
+
+function applyTone(text){
+
+    if(aiSettings.tone === "專業"){
         return `
-<b>🌐 HTML學習建議</b><br><br>
-
-HTML 是建立網頁的基礎語言，幾乎所有網站都會用到。<br><br>
-
-<b>📌 你可以先學這些：</b><br>
-1️⃣ h1 ~ h6：標題<br>
-2️⃣ p：文字段落<br>
-3️⃣ img：圖片<br>
-4️⃣ a：連結<br>
-5️⃣ div：區塊容器<br><br>
-
-<b>💡 簡單範例：</b><br><br>
-
-&lt;h1&gt;我的網站&lt;/h1&gt;<br>
-&lt;p&gt;這是一段文字&lt;/p&gt;<br><br>
-
-<b>📚 學習順序：</b><br>
-HTML → CSS → JavaScript<br><br>
-
-<b>🎯 建議：</b><br>
-不要只看影片，要邊學邊做小作品，進步會快很多。
+<b>📘 專業分析</b><br><br>
+${text}<br><br>
+此問題建議透過系統化方式處理，
+並逐步確認執行結果。
 `;
     }
 
-    // 程式問題
-    if(text.includes("程式")){
-
+    if(aiSettings.tone === "輕鬆"){
         return `
-<b>💻 程式學習建議</b><br><br>
-
-學程式最重要的不是背語法，而是理解邏輯。<br><br>
-
-<b>📌 推薦學習方式：</b><br>
-1️⃣ 先學基礎語法<br>
-2️⃣ 自己修改範例<br>
-3️⃣ 練習小專案<br>
-4️⃣ 遇到錯誤就查原因<br><br>
-
-<b>💡 新手常見問題：</b><br>
-✔ 一次學太多<br>
-✔ 只看不實作<br>
-✔ 害怕報錯<br><br>
-
-其實報錯很正常，很多工程師每天都在修錯誤。<br><br>
-
-<b>🎯 建議：</b><br>
-每天練習 30 分鐘，比一次學 5 小時更有效。
+😄 沒問題！<br><br>
+${text}<br><br>
+其實一步一步做就可以了，
+不用太緊張～
 `;
     }
 
-    // 數學問題
-    if(text.includes("數學")){
-
+    if(aiSettings.tone === "熱情"){
         return `
-<b>📚 數學解題方法</b><br><br>
-
-很多人覺得數學難，其實大部分問題都是因為「沒看懂題目」。<br><br>
-
-<b>📌 解題步驟：</b><br>
-1️⃣ 先找題目給的條件<br>
-2️⃣ 確認題目在問什麼<br>
-3️⃣ 找適合的公式<br>
-4️⃣ 一步一步代入計算<br><br>
-
-<b>💡 重點：</b><br>
-不要急著算，先理解題目意思。<br><br>
-
-<b>🎯 建議：</b><br>
-做完題目後，可以回頭檢查一次計算過程。
+🔥 太好了！<br><br>
+${text}<br><br>
+你這個方向很棒！
+繼續做下去一定會越來越強！
 `;
     }
 
-    // AI問題
-    if(text.includes("ai") || text.includes("AI")){
-
+    if(aiSettings.tone === "簡短"){
         return `
-<b>🤖 AI介紹</b><br><br>
-
-AI（人工智慧）是讓電腦模擬人類思考與學習的技術。<br><br>
-
-<b>📌 AI可以做什麼？</b><br>
-✔ 聊天問答<br>
-✔ 圖片生成<br>
-✔ 語音辨識<br>
-✔ 自動翻譯<br>
-✔ 資料分析<br><br>
-
-<b>💡 常見AI工具：</b><br>
-• ChatGPT：聊天與寫作<br>
-• Midjourney：生成圖片<br>
-• Gemini：搜尋與分析<br><br>
-
-<b>🎯 建議：</b><br>
-學AI時，可以從「怎麼使用AI工具」開始，再慢慢了解背後原理。
+${text}<br><br>
+重點：一步一步完成即可。
 `;
     }
 
-    // 通用回答
-    return `
-<b>🧠 AI 分析結果</b><br><br>
-
-你輸入的內容是：<br>
-「${text}」<br><br>
-
-<b>📌 我的理解：</b><br>
-這個問題和資訊整理、學習或解決方法有關。<br><br>
-
-<b>💡 建議做法：</b><br>
-1️⃣ 先確認目標<br>
-2️⃣ 把問題拆小<br>
-3️⃣ 一步一步完成<br>
-4️⃣ 遇到問題再修正<br><br>
-
-<b>🚀 進一步建議：</b><br>
-如果你能提供更詳細的內容，例如：<br>
-• 發生什麼問題<br>
-• 哪一步卡住<br>
-• 想達成什麼效果<br><br>
-
-我就能提供更精準、更完整的解答。<br><br>
-
-<b>🎯 結論：</b><br>
-很多問題其實不是太難，而是一次想太多。<br>
-把問題拆開後，通常就會容易很多。
-`;
+    return text;
 }
 
-// ===================== 生成內容 =====================
-generateBtn.onclick = () => {
-
-    const text = textarea.value.trim();
-
-    if(!text){
-        resultBox.innerHTML = "⚠️ 請先輸入問題，我才能幫你分析。";
-        return;
-    }
-
-    history.push(text);
-
-    resultBox.innerHTML = generateAI(text);
-};
-
-// ===================== 側邊欄功能 =====================
-
-// 行程規劃
-menuBtns[0].onclick = () => {
-
-    resultBox.innerHTML = `
-<b>📅 行程規劃助手</b><br><br>
-
-一個好的行程規劃，可以讓時間利用更有效率。<br><br>
-
-<b>📌 建議安排方式：</b><br>
-☀️ 早上：安排主要活動<br>
-🍱 中午：休息與吃飯<br>
-🌆 下午：自由活動或備用行程<br>
-🌙 晚上：放鬆與整理今天內容<br><br>
-
-<b>💡 小技巧：</b><br>
-不要把時間排太滿，保留一些彈性會更輕鬆。
-`;
-};
-
-// 筆記整理
-menuBtns[1].onclick = () => {
-
-    resultBox.innerHTML = `
-<b>📝 筆記整理助手</b><br><br>
-
-整理筆記最重要的是「看得懂」。<br><br>
-
-<b>📌 建議方法：</b><br>
-✔ 標題清楚<br>
-✔ 重點條列<br>
-✔ 使用關鍵字<br>
-✔ 顏色分類重點<br><br>
-
-<b>🎯 建議：</b><br>
-不要整頁都寫滿字，簡潔反而更容易記住。
-`;
-};
-
-// 學習助手
-menuBtns[2].onclick = () => {
-
-    resultBox.innerHTML = `
-<b>📚 學習助手</b><br><br>
-
-學習最重要的是持續，而不是一次學很多。<br><br>
-
-<b>📌 高效率學習方式：</b><br>
-1️⃣ 每天固定時間學習<br>
-2️⃣ 學完立刻練習<br>
-3️⃣ 用自己的話重新解釋<br>
-4️⃣ 定期複習<br><br>
-
-<b>💡 重點：</b><br>
-真正的理解，比死背更重要。
-`;
-};
-
-// 資料查詢
-menuBtns[3].onclick = () => {
-
-    resultBox.innerHTML = `
-<b>🔍 資料查詢助手</b><br><br>
-
-查資料時，不要只看第一個答案。<br><br>
-
-<b>📌 建議方法：</b><br>
-✔ 使用正確關鍵字<br>
-✔ 多比較不同網站<br>
-✔ 確認資訊來源可信度<br><br>
-
-<b>🎯 建議：</b><br>
-學會查資料，比直接得到答案更重要。
-`;
-};
-
-// AI建議
-menuBtns[4].onclick = () => {
-
-    resultBox.innerHTML = `
-<b>💡 AI 建議助手</b><br><br>
-
-很多問題其實都可以透過拆解來解決。<br><br>
-
-<b>📌 建議流程：</b><br>
-1️⃣ 先確認問題核心<br>
-2️⃣ 找出目前卡住的位置<br>
-3️⃣ 從最簡單的部分開始<br>
-4️⃣ 慢慢優化結果<br><br>
-
-<b>🎯 核心觀念：</b><br>
-一步一步完成，比一次做到完美更重要。
-`;
-};
-
-// ===================== 導覽列功能 =====================
-
-// 首頁
-navLinks[0].onclick = (e) => {
-    e.preventDefault();
-
-    resultBox.innerHTML = `
-<b>🏠 歡迎回到首頁</b><br><br>
-
-你可以使用左側功能快速獲得幫助，<br>
-也可以直接輸入問題讓 AI 幫你分析與回答。
-`;
-};
-
-// 功能
-navLinks[1].onclick = (e) => {
-    e.preventDefault();
-
-    resultBox.innerHTML = `
-<b>⚙️ 系統功能總覽</b><br><br>
-
-🤖 AI 智慧問答<br>
-📅 行程規劃<br>
-📝 筆記整理<br>
-📚 學習助手<br>
-🔍 資料查詢<br>
-💡 AI 建議<br>
-📜 歷史紀錄<br><br>
-
-這些功能可以幫助你更有效率地整理資訊與學習。
-`;
-};
-
-// 歷史紀錄
-navLinks[2].onclick = (e) => {
-
-    e.preventDefault();
-
-    if(history.length === 0){
-        resultBox.innerHTML = "📜 目前還沒有歷史紀錄";
-        return;
-    }
-
-    let html = "<b>📜 歷史紀錄</b><br><br>";
-
-    history.forEach((item,index)=>{
-        html += `${index + 1}. ${item}<br><br>`;
-    });
-
-    resultBox.innerHTML = html;
-};
-
-// 設定
-navLinks[3].onclick = (e) => {
-
-    e.preventDefault();
-
-    resultBox.innerHTML = `
-<b>⚙️ 系統設定</b><br><br>
-
-✔ AI 系統正常運作<br>
-✔ 歷史紀錄已啟用<br>
-✔ 智慧分析模式已開啟<br><br>
-
-目前系統運行穩定。
-`;
-};
-
-// ===================== 工具按鈕 =====================
-
-// 上傳檔案
-toolBtns[0].onclick = () => {
-
-    resultBox.innerHTML = `
-<b>📎 上傳檔案功能</b><br><br>
-
-目前這個功能是展示版本。<br><br>
-
-未來可以支援：<br>
-✔ 上傳圖片<br>
-✔ 上傳 PDF<br>
-✔ 上傳 Word 文件<br>
-✔ AI 自動分析內容
-`;
-};
-
-// 範例問題
-toolBtns[1].onclick = () => {
-
-    textarea.value = "怎麼有效學習HTML？";
-
-    resultBox.innerHTML = `
-<b>💬 已填入範例問題</b><br><br>
-
-目前輸入框已自動填入：<br>
-「怎麼有效學習HTML？」<br><br>
-
-你現在可以點擊「✨生成內容」查看 AI 回答。
-`;
-};
-
-</script></body>
+</script>
 </html>
