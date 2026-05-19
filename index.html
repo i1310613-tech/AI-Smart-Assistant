@@ -531,26 +531,351 @@ textarea{
 </div>
 <script>
 
+// ===================== 基本元素 =====================
+
+const textarea = document.querySelector("textarea");
+const resultBox = document.querySelector(".result-box");
+
+const generateBtn =
+document.querySelector(".generate-btn");
+
+const menuBtns =
+document.querySelectorAll(".menu button");
+
+const toolBtns =
+document.querySelectorAll(".tool-btn");
+
+const navLinks =
+document.querySelectorAll(".nav-links a");
+
 // ===================== AI 設定 =====================
 
 let aiSettings = {
-    tone: "普通",
-    language: "繁體中文"
+    tone:"普通",
+    language:"繁體中文"
 };
 
-// 取得右上角「設定」
-const settingBtn = document.querySelectorAll(".nav-links a")[3];
+// ===================== 歷史紀錄 =====================
 
-// ===================== 建立設定視窗 =====================
+let history = [];
 
-const settingPanel = document.createElement("div");
+// ===================== AI 回覆核心 =====================
+
+function generateAI(text){
+
+    // HTML
+    if(text.includes("html")){
+
+        return `
+<b>🌐 HTML 學習建議</b><br><br>
+
+HTML 是建立網頁最基礎的語言。
+
+<b>📌 建議先學：</b><br>
+1️⃣ 標題 h1~h6<br>
+2️⃣ p 文字段落<br>
+3️⃣ img 圖片<br>
+4️⃣ a 超連結<br>
+5️⃣ div 區塊<br><br>
+
+<b>💡 學習方式：</b><br>
+邊做作品邊學效果最好。<br><br>
+
+<b>🎯 結論：</b><br>
+HTML → CSS → JavaScript
+是最推薦的學習順序。
+`;
+    }
+
+    // AI
+    if(text.includes("AI") || text.includes("ai")){
+
+        return `
+<b>🤖 AI 技術介紹</b><br><br>
+
+AI 是讓電腦模擬人類思考的技術。
+
+<b>📌 AI 可以做：</b><br>
+✔ 聊天問答<br>
+✔ 圖片生成<br>
+✔ 語音辨識<br>
+✔ 資料分析<br><br>
+
+<b>💡 建議：</b><br>
+先學會使用 AI 工具，
+再慢慢了解原理。
+`;
+    }
+
+    // 程式
+    if(text.includes("程式")){
+
+        return `
+<b>💻 程式學習建議</b><br><br>
+
+<b>📌 推薦流程：</b><br>
+1️⃣ 先學基礎<br>
+2️⃣ 修改範例<br>
+3️⃣ 練習小專案<br>
+4️⃣ 修正錯誤<br><br>
+
+<b>💡 重點：</b><br>
+不要害怕報錯，
+工程師每天都在修 Bug。
+`;
+    }
+
+    // 通用
+    return `
+<b>🧠 AI 分析結果</b><br><br>
+
+你輸入的內容：<br>
+「${text}」<br><br>
+
+<b>📌 建議：</b><br>
+1️⃣ 先確認問題核心<br>
+2️⃣ 拆解步驟<br>
+3️⃣ 一步一步完成<br><br>
+
+<b>💡 小技巧：</b><br>
+把大問題拆小，
+通常會更容易解決。<br><br>
+
+<b>🎯 結論：</b><br>
+持續練習與修正，
+會讓成果越來越好。
+`;
+}
+
+// ===================== AI 語氣系統 =====================
+
+function applyTone(text){
+
+    if(aiSettings.tone === "專業"){
+
+        return `
+<b>📘 專業模式</b><br><br>
+${text}<br><br>
+系統建議採用穩定且循序漸進的方式進行。
+`;
+    }
+
+    if(aiSettings.tone === "輕鬆"){
+
+        return `
+😄 沒問題！<br><br>
+${text}<br><br>
+其實慢慢做就可以了～
+`;
+    }
+
+    if(aiSettings.tone === "熱情"){
+
+        return `
+🔥 很棒！<br><br>
+${text}<br><br>
+你現在的方向非常好！
+`;
+    }
+
+    if(aiSettings.tone === "簡短"){
+
+        return `
+${text}<br><br>
+✔ 重點：一步一步完成。
+`;
+    }
+
+    return text;
+}
+
+// ===================== 生成內容 =====================
+
+generateBtn.addEventListener("click",()=>{
+
+    const text = textarea.value.trim();
+
+    if(!text){
+
+        resultBox.innerHTML =
+        "⚠️ 請先輸入問題";
+
+        return;
+    }
+
+    history.push(text);
+
+    resultBox.innerHTML =
+    applyTone(generateAI(text));
+});
+
+// ===================== 工具按鈕 =====================
+
+// 上傳檔案
+toolBtns[0].addEventListener("click",()=>{
+
+    resultBox.innerHTML = `
+<b>📎 上傳檔案功能</b><br><br>
+
+目前為展示版本。
+
+未來可以支援：<br>
+✔ 圖片分析<br>
+✔ PDF 分析<br>
+✔ 文件整理
+`;
+});
+
+// 範例問題
+toolBtns[1].addEventListener("click",()=>{
+
+    textarea.value =
+    "怎麼有效學習 HTML、CSS 和 JavaScript？";
+
+    resultBox.innerHTML = `
+<b>💬 已填入範例問題</b><br><br>
+
+目前已自動輸入問題：<br><br>
+
+「怎麼有效學習 HTML、CSS 和 JavaScript？」<br><br>
+
+你現在可以點擊：
+<b>✨ 生成內容</b>
+`;
+});
+
+// ===================== 側邊欄功能 =====================
+
+// 行程規劃
+menuBtns[0].addEventListener("click",()=>{
+
+    resultBox.innerHTML = `
+<b>📅 行程規劃</b><br><br>
+
+☀️ 早上：主要活動<br>
+🍱 中午：休息吃飯<br>
+🌆 下午：自由活動<br>
+🌙 晚上：放鬆整理
+`;
+});
+
+// 筆記整理
+menuBtns[1].addEventListener("click",()=>{
+
+    resultBox.innerHTML = `
+<b>📝 筆記整理</b><br><br>
+
+✔ 標題清楚<br>
+✔ 重點條列<br>
+✔ 使用關鍵字
+`;
+});
+
+// 學習助手
+menuBtns[2].addEventListener("click",()=>{
+
+    resultBox.innerHTML = `
+<b>📚 學習助手</b><br><br>
+
+✔ 每天固定學習<br>
+✔ 多做練習<br>
+✔ 持續複習
+`;
+});
+
+// 資料查詢
+menuBtns[3].addEventListener("click",()=>{
+
+    resultBox.innerHTML = `
+<b>🔍 資料查詢</b><br><br>
+
+✔ 使用正確關鍵字<br>
+✔ 多來源比較<br>
+✔ 確認資訊可信度
+`;
+});
+
+// AI建議
+menuBtns[4].addEventListener("click",()=>{
+
+    resultBox.innerHTML = `
+<b>💡 AI 建議</b><br><br>
+
+✔ 拆解問題<br>
+✔ 一步一步完成<br>
+✔ 遇到問題再修正
+`;
+});
+
+// ===================== 導覽列 =====================
+
+// 首頁
+navLinks[0].addEventListener("click",(e)=>{
+
+    e.preventDefault();
+
+    resultBox.innerHTML = `
+<b>🏠 首頁</b><br><br>
+
+歡迎使用智慧 AI 助手。
+`;
+});
+
+// 功能
+navLinks[1].addEventListener("click",(e)=>{
+
+    e.preventDefault();
+
+    resultBox.innerHTML = `
+<b>⚙️ 系統功能</b><br><br>
+
+🤖 AI問答<br>
+📅 行程規劃<br>
+📝 筆記整理<br>
+📚 學習助手<br>
+🔍 資料查詢<br>
+💡 AI建議
+`;
+});
+
+// 歷史紀錄
+navLinks[2].addEventListener("click",(e)=>{
+
+    e.preventDefault();
+
+    if(history.length === 0){
+
+        resultBox.innerHTML =
+        "📜 尚無歷史紀錄";
+
+        return;
+    }
+
+    let html =
+    "<b>📜 歷史紀錄</b><br><br>";
+
+    history.forEach((item,index)=>{
+
+        html += `
+        ${index + 1}. ${item}<br><br>
+        `;
+    });
+
+    resultBox.innerHTML = html;
+});
+
+// ===================== 設定介面 =====================
+
+const settingPanel =
+document.createElement("div");
 
 settingPanel.style.position = "fixed";
 settingPanel.style.top = "0";
 settingPanel.style.left = "0";
 settingPanel.style.width = "100%";
 settingPanel.style.height = "100%";
-settingPanel.style.background = "rgba(0,0,0,0.45)";
+settingPanel.style.background =
+"rgba(0,0,0,0.45)";
 settingPanel.style.display = "none";
 settingPanel.style.justifyContent = "center";
 settingPanel.style.alignItems = "center";
@@ -559,112 +884,99 @@ settingPanel.style.zIndex = "99999";
 settingPanel.innerHTML = `
 
 <div style="
-    width:420px;
-    background:white;
-    border-radius:25px;
-    padding:30px;
-    box-shadow:0 20px 50px rgba(0,0,0,0.2);
+width:420px;
+background:white;
+padding:30px;
+border-radius:25px;
 ">
 
-    <h2 style="
-        margin-bottom:25px;
-        color:#111827;
-    ">
-        ⚙️ AI 設定
-    </h2>
+<h2 style="margin-bottom:25px;">
+⚙️ AI 設定
+</h2>
 
-    <!-- 語氣 -->
-    <div style="margin-bottom:25px;">
+<div style="margin-bottom:20px;">
 
-        <div style="
-            font-size:16px;
-            margin-bottom:10px;
-            font-weight:700;
-        ">
-            🗣️ AI 說話語氣
-        </div>
+<div style="margin-bottom:10px;">
+🗣️ AI語氣
+</div>
 
-        <select id="toneSelect" style="
-            width:100%;
-            padding:12px;
-            border-radius:12px;
-            border:1px solid #d1d5db;
-            font-size:15px;
-        ">
-            <option>普通</option>
-            <option>專業</option>
-            <option>輕鬆</option>
-            <option>熱情</option>
-            <option>簡短</option>
-        </select>
+<select id="toneSelect"
+style="
+width:100%;
+padding:12px;
+border-radius:12px;
+">
 
-    </div>
+<option>普通</option>
+<option>專業</option>
+<option>輕鬆</option>
+<option>熱情</option>
+<option>簡短</option>
 
-    <!-- 語言 -->
-    <div style="margin-bottom:25px;">
+</select>
 
-        <div style="
-            font-size:16px;
-            margin-bottom:10px;
-            font-weight:700;
-        ">
-            🌐 回覆語言
-        </div>
+</div>
 
-        <select id="langSelect" style="
-            width:100%;
-            padding:12px;
-            border-radius:12px;
-            border:1px solid #d1d5db;
-            font-size:15px;
-        ">
-            <option>繁體中文</option>
-            <option>English</option>
-            <option>日本語</option>
-        </select>
+<div style="margin-bottom:25px;">
 
-    </div>
+<div style="margin-bottom:10px;">
+🌐 回覆語言
+</div>
 
-    <!-- 儲存 -->
-    <button id="saveSetting" style="
-        width:100%;
-        padding:14px;
-        border:none;
-        border-radius:14px;
-        background:linear-gradient(135deg,#2563eb,#7c3aed);
-        color:white;
-        font-size:16px;
-        font-weight:700;
-        cursor:pointer;
-    ">
-        💾 儲存設定
-    </button>
+<select id="langSelect"
+style="
+width:100%;
+padding:12px;
+border-radius:12px;
+">
+
+<option>繁體中文</option>
+<option>English</option>
+<option>日本語</option>
+
+</select>
+
+</div>
+
+<button id="saveSetting"
+style="
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:
+linear-gradient(135deg,#2563eb,#7c3aed);
+color:white;
+font-weight:700;
+cursor:pointer;
+">
+💾 儲存設定
+</button>
 
 </div>
 `;
 
 document.body.appendChild(settingPanel);
 
-// ===================== 打開設定 =====================
-
-settingBtn.addEventListener("click",(e)=>{
+// 打開設定
+navLinks[3].addEventListener("click",(e)=>{
 
     e.preventDefault();
 
     settingPanel.style.display = "flex";
 });
 
-// ===================== 點背景關閉 =====================
-
+// 點背景關閉
 settingPanel.addEventListener("click",(e)=>{
 
     if(e.target === settingPanel){
-        settingPanel.style.display = "none";
+
+        settingPanel.style.display =
+        "none";
     }
 });
 
-// ===================== 儲存設定 =====================
-
+// 儲存設定
 document.addEventListener("click",(e)=>{
 
     if(e.target.id === "saveSetting"){
@@ -675,62 +987,20 @@ document.addEventListener("click",(e)=>{
         aiSettings.language =
         document.getElementById("langSelect").value;
 
-        settingPanel.style.display = "none";
+        settingPanel.style.display =
+        "none";
 
-        document.querySelector(".result-box").innerHTML = `
-        <b>⚙️ 設定已儲存</b><br><br>
+        resultBox.innerHTML = `
+<b>⚙️ 設定已儲存</b><br><br>
 
-        🗣️ AI語氣：
-        ${aiSettings.tone}<br><br>
+🗣️ AI語氣：
+${aiSettings.tone}<br><br>
 
-        🌐 回覆語言：
-        ${aiSettings.language}<br><br>
-
-        之後 AI 將依照你的設定進行回覆。
-        `;
+🌐 回覆語言：
+${aiSettings.language}
+`;
     }
 });
-
-// ===================== AI語氣系統 =====================
-
-function applyTone(text){
-
-    if(aiSettings.tone === "專業"){
-        return `
-<b>📘 專業分析</b><br><br>
-${text}<br><br>
-此問題建議透過系統化方式處理，
-並逐步確認執行結果。
-`;
-    }
-
-    if(aiSettings.tone === "輕鬆"){
-        return `
-😄 沒問題！<br><br>
-${text}<br><br>
-其實一步一步做就可以了，
-不用太緊張～
-`;
-    }
-
-    if(aiSettings.tone === "熱情"){
-        return `
-🔥 太好了！<br><br>
-${text}<br><br>
-你這個方向很棒！
-繼續做下去一定會越來越強！
-`;
-    }
-
-    if(aiSettings.tone === "簡短"){
-        return `
-${text}<br><br>
-重點：一步一步完成即可。
-`;
-    }
-
-    return text;
-}
 
 </script></body>
 </html>
