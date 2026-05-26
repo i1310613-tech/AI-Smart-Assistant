@@ -717,33 +717,52 @@ function generateAI(text){
 
     const openings = [
 
-        "🧠 我幫你分析了一下這個問題：",
+        "🧠 我幫你分析了一下：",
 
-        "📌 根據你的內容，我整理出以下重點：",
+        "📌 根據你的問題，我整理出以下重點：",
 
-        "💡 這個問題其實可以這樣理解：",
+        "💡 這個問題可以從幾個方向思考：",
 
-        "🚀 我提供你幾個實用的方法：",
+        "🚀 我提供你一些實用建議：",
 
-        "📚 我幫你整理成簡單易懂的方式："
+        "📚 我幫你整理成簡單易懂的內容："
     ];
 
     // ===================== 隨機結尾 =====================
 
     const endings = [
 
-        "🎯 只要持續練習，你會越來越熟悉。",
+        "🎯 持續練習會比一次學很多更有效。",
 
-        "🔥 建議先從最簡單的部分開始。",
+        "🔥 建議從最簡單的部分開始。",
 
-        "📈 慢慢累積經驗會比一次學很多更有效。",
+        "📈 穩定學習通常進步最快。",
 
-        "💪 重點不是速度，而是持續。",
+        "💪 不用急，慢慢累積經驗就會變強。",
 
         "✨ 一步一步完成通常最穩定。"
     ];
 
-    // ===================== 隨機選擇 =====================
+    // ===================== 隨機額外建議 =====================
+
+    const extraTips = [
+
+        "💡 可以把今天學到的內容記錄下來，之後複習會更快。",
+
+        "📚 建議實際操作一次，比只看教學更容易記住。",
+
+        "🚀 如果卡住，可以先完成簡單版本，再慢慢優化。",
+
+        "🛠️ 遇到錯誤時，可以先檢查拼字與符號。",
+
+        "📌 練習時不要只複製貼上，要試著自己修改。",
+
+        "🎯 很多高手都是從大量練習開始的。",
+
+        "⚡ 每天固定學一點，效果通常最好。",
+
+        "🔍 如果看不懂，可以先拆成小步驟理解。"
+    ];
 
     const opening =
     openings[Math.floor(Math.random()*openings.length)];
@@ -751,57 +770,50 @@ function generateAI(text){
     const ending =
     endings[Math.floor(Math.random()*endings.length)];
 
+    const tip1 =
+    extraTips[Math.floor(Math.random()*extraTips.length)];
+
+    const tip2 =
+    extraTips[Math.floor(Math.random()*extraTips.length)];
+
     // ===================== HTML =====================
 
     if(text.includes("html")){
 
-        const htmlReplies = [
-
-            `
-            HTML 是建立網站的基礎語言。<br><br>
-
-            <b>📌 建議先學：</b><br>
-            • 標題 h1~h6<br>
-            • div 區塊<br>
-            • img 圖片<br>
-            • a 超連結<br><br>
-
-            <b>💡 學習技巧：</b><br>
-            邊做作品邊學會進步最快。
-            `,
-
-            `
-            HTML 可以用來建立網頁內容。<br><br>
-
-            <b>📚 常用標籤：</b><br>
-            ✔ p 文字<br>
-            ✔ button 按鈕<br>
-            ✔ input 輸入框<br>
-            ✔ img 圖片<br><br>
-
-            <b>🎯 建議：</b><br>
-            先理解結構，再學 CSS 美化。
-            `,
-
-            `
-            學 HTML 最重要的是理解「網頁結構」。<br><br>
-
-            <b>📌 推薦順序：</b><br>
-            1️⃣ HTML<br>
-            2️⃣ CSS<br>
-            3️⃣ JavaScript<br><br>
-
-            <b>🚀 重點：</b><br>
-            不要只看教學，要自己實作。
-            `
-        ];
-
-        const randomReply =
-        htmlReplies[Math.floor(Math.random()*htmlReplies.length)];
-
         return `
         <b>${opening}</b><br><br>
-        ${randomReply}<br><br>
+
+        HTML 是建立網站的基礎語言。<br><br>
+
+        <b>📌 建議先學：</b><br>
+        ✔ h1 ~ h6 標題<br>
+        ✔ p 文字段落<br>
+        ✔ div 區塊<br>
+        ✔ img 圖片<br>
+        ✔ a 超連結<br><br>
+
+        <b>📚 推薦學習順序：</b><br>
+        1️⃣ HTML<br>
+        2️⃣ CSS<br>
+        3️⃣ JavaScript<br><br>
+
+        <b>💡 學習技巧：</b><br>
+        • 邊做作品邊學<br>
+        • 多修改範例<br>
+        • 練習排版<br><br>
+
+        <b>🚫 常見錯誤：</b><br>
+        • 標籤沒關閉<br>
+        • class 名稱打錯<br>
+        • 路徑設定錯誤<br><br>
+
+        <b>🛠️ 下一步建議：</b><br>
+        可以先做一個簡單個人網站。<br><br>
+
+        ${tip1}<br><br>
+
+        ${tip2}<br><br>
+
         <b>${ending}</b>
         `;
     }
@@ -810,45 +822,34 @@ function generateAI(text){
 
     if(text.includes("程式")){
 
-        const codingReplies = [
-
-            `
-            學程式最重要的是邏輯。<br><br>
-
-            <b>📌 建議：</b><br>
-            ✔ 多實作<br>
-            ✔ 不怕報錯<br>
-            ✔ 修改別人的範例<br><br>
-
-            很多高手都是從一直 Debug 開始的。
-            `,
-
-            `
-            程式設計其實像在解決問題。<br><br>
-
-            <b>💡 方法：</b><br>
-            1️⃣ 先理解問題<br>
-            2️⃣ 拆解步驟<br>
-            3️⃣ 用程式完成<br><br>
-
-            慢慢練習會越來越熟悉。
-            `,
-
-            `
-            新手常見問題是一次學太多。<br><br>
-
-            <b>🎯 建議：</b><br>
-            每天學一點，
-            比一次學很久更有效。
-            `
-        ];
-
-        const randomReply =
-        codingReplies[Math.floor(Math.random()*codingReplies.length)];
-
         return `
         <b>${opening}</b><br><br>
-        ${randomReply}<br><br>
+
+        學程式最重要的是邏輯與練習。<br><br>
+
+        <b>📌 建議學習方式：</b><br>
+        ✔ 先理解基本語法<br>
+        ✔ 多實作小專案<br>
+        ✔ 修改別人的範例<br>
+        ✔ 練習 Debug<br><br>
+
+        <b>📚 新手推薦：</b><br>
+        • HTML / CSS<br>
+        • JavaScript<br>
+        • Python<br><br>
+
+        <b>🚫 常見問題：</b><br>
+        • 一次學太多<br>
+        • 害怕報錯<br>
+        • 只看影片不實作<br><br>
+
+        <b>💡 建議：</b><br>
+        可以每天固定練習 30 分鐘。<br><br>
+
+        ${tip1}<br><br>
+
+        ${tip2}<br><br>
+
         <b>${ending}</b>
         `;
     }
@@ -857,79 +858,40 @@ function generateAI(text){
 
     if(text.includes("AI") || text.includes("ai")){
 
-        const aiReplies = [
-
-            `
-            AI 是讓電腦模擬人類思考的技術。<br><br>
-
-            <b>📌 AI 可以做：</b><br>
-            ✔ 問答<br>
-            ✔ 圖片生成<br>
-            ✔ 資料分析<br>
-            ✔ 翻譯
-            `,
-
-            `
-            現在很多工作都開始使用 AI。<br><br>
-
-            <b>💡 常見 AI：</b><br>
-            • ChatGPT<br>
-            • Gemini<br>
-            • Midjourney<br><br>
-
-            學會使用 AI 可以提升效率。
-            `,
-
-            `
-            AI 發展速度非常快。<br><br>
-
-            <b>📚 建議：</b><br>
-            可以先學「怎麼使用 AI 工具」，
-            再慢慢研究原理。
-            `
-        ];
-
-        const randomReply =
-        aiReplies[Math.floor(Math.random()*aiReplies.length)];
-
         return `
         <b>${opening}</b><br><br>
-        ${randomReply}<br><br>
+
+        AI 是讓電腦模擬人類思考的技術。<br><br>
+
+        <b>📌 AI 可以應用：</b><br>
+        ✔ 聊天問答<br>
+        ✔ 圖片生成<br>
+        ✔ 語音辨識<br>
+        ✔ 自動翻譯<br>
+        ✔ 資料分析<br><br>
+
+        <b>📚 推薦學習方向：</b><br>
+        • ChatGPT 使用<br>
+        • AI 生圖<br>
+        • Prompt 提示詞<br>
+        • Python AI 開發<br><br>
+
+        <b>🚀 未來發展：</b><br>
+        AI 已經開始影響很多工作與學習方式。<br><br>
+
+        <b>💡 建議：</b><br>
+        可以先學會使用 AI 工具，
+        再慢慢了解原理。<br><br>
+
+        ${tip1}<br><br>
+
+        ${tip2}<br><br>
+
         <b>${ending}</b>
         `;
     }
 
     // ===================== 一般回答 =====================
-
-    const normalReplies = [
-
-        `
-        我有整理出幾個重點：<br><br>
-
-        ✔ 先確認問題核心<br>
-        ✔ 一步一步解決<br>
-        ✔ 不要一次做太多
-        `,
-
-        `
-        這個問題其實可以拆解處理。<br><br>
-
-        <b>📌 建議：</b><br>
-        先完成最簡單的部分，
-        再慢慢優化。
-        `,
-
-        `
-        很多問題不是太難，
-        而是資訊太多。<br><br>
-
-        <b>💡 方法：</b><br>
-        把事情拆小會更容易完成。
-        `
-    ];
-
-    const randomReply =
-    normalReplies[Math.floor(Math.random()*normalReplies.length)];
 
     return `
     <b>${opening}</b><br><br>
@@ -937,7 +899,26 @@ function generateAI(text){
     你輸入的內容：<br>
     「${text}」<br><br>
 
-    ${randomReply}<br><br>
+    <b>📌 我的建議：</b><br>
+    ✔ 先確認目標<br>
+    ✔ 把問題拆小<br>
+    ✔ 一步一步完成<br>
+    ✔ 遇到問題再修正<br><br>
+
+    <b>💡 解決方法：</b><br>
+    很多問題其實不是太難，
+    而是資訊太多。<br><br>
+
+    把事情拆解後，
+    通常就會更容易理解。<br><br>
+
+    <b>🚀 下一步：</b><br>
+    可以提供更詳細的內容，
+    AI 就能給你更精準的回答。<br><br>
+
+    ${tip1}<br><br>
+
+    ${tip2}<br><br>
 
     <b>${ending}</b>
     `;
