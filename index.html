@@ -713,90 +713,235 @@ let history = [];
 
 function generateAI(text){
 
-    // HTML
+    // ===================== 隨機開頭 =====================
+
+    const openings = [
+
+        "🧠 我幫你分析了一下這個問題：",
+
+        "📌 根據你的內容，我整理出以下重點：",
+
+        "💡 這個問題其實可以這樣理解：",
+
+        "🚀 我提供你幾個實用的方法：",
+
+        "📚 我幫你整理成簡單易懂的方式："
+    ];
+
+    // ===================== 隨機結尾 =====================
+
+    const endings = [
+
+        "🎯 只要持續練習，你會越來越熟悉。",
+
+        "🔥 建議先從最簡單的部分開始。",
+
+        "📈 慢慢累積經驗會比一次學很多更有效。",
+
+        "💪 重點不是速度，而是持續。",
+
+        "✨ 一步一步完成通常最穩定。"
+    ];
+
+    // ===================== 隨機選擇 =====================
+
+    const opening =
+    openings[Math.floor(Math.random()*openings.length)];
+
+    const ending =
+    endings[Math.floor(Math.random()*endings.length)];
+
+    // ===================== HTML =====================
+
     if(text.includes("html")){
 
+        const htmlReplies = [
+
+            `
+            HTML 是建立網站的基礎語言。<br><br>
+
+            <b>📌 建議先學：</b><br>
+            • 標題 h1~h6<br>
+            • div 區塊<br>
+            • img 圖片<br>
+            • a 超連結<br><br>
+
+            <b>💡 學習技巧：</b><br>
+            邊做作品邊學會進步最快。
+            `,
+
+            `
+            HTML 可以用來建立網頁內容。<br><br>
+
+            <b>📚 常用標籤：</b><br>
+            ✔ p 文字<br>
+            ✔ button 按鈕<br>
+            ✔ input 輸入框<br>
+            ✔ img 圖片<br><br>
+
+            <b>🎯 建議：</b><br>
+            先理解結構，再學 CSS 美化。
+            `,
+
+            `
+            學 HTML 最重要的是理解「網頁結構」。<br><br>
+
+            <b>📌 推薦順序：</b><br>
+            1️⃣ HTML<br>
+            2️⃣ CSS<br>
+            3️⃣ JavaScript<br><br>
+
+            <b>🚀 重點：</b><br>
+            不要只看教學，要自己實作。
+            `
+        ];
+
+        const randomReply =
+        htmlReplies[Math.floor(Math.random()*htmlReplies.length)];
+
         return `
-<b>🌐 HTML 學習建議</b><br><br>
-
-HTML 是建立網頁最基礎的語言。
-
-<b>📌 建議先學：</b><br>
-1️⃣ 標題 h1~h6<br>
-2️⃣ p 文字段落<br>
-3️⃣ img 圖片<br>
-4️⃣ a 超連結<br>
-5️⃣ div 區塊<br><br>
-
-<b>💡 學習方式：</b><br>
-邊做作品邊學效果最好。<br><br>
-
-<b>🎯 結論：</b><br>
-HTML → CSS → JavaScript
-是最推薦的學習順序。
-`;
+        <b>${opening}</b><br><br>
+        ${randomReply}<br><br>
+        <b>${ending}</b>
+        `;
     }
 
-    // AI
-    if(text.includes("AI") || text.includes("ai")){
+    // ===================== 程式 =====================
 
-        return `
-<b>🤖 AI 技術介紹</b><br><br>
-
-AI 是讓電腦模擬人類思考的技術。
-
-<b>📌 AI 可以做：</b><br>
-✔ 聊天問答<br>
-✔ 圖片生成<br>
-✔ 語音辨識<br>
-✔ 資料分析<br><br>
-
-<b>💡 建議：</b><br>
-先學會使用 AI 工具，
-再慢慢了解原理。
-`;
-    }
-
-    // 程式
     if(text.includes("程式")){
 
+        const codingReplies = [
+
+            `
+            學程式最重要的是邏輯。<br><br>
+
+            <b>📌 建議：</b><br>
+            ✔ 多實作<br>
+            ✔ 不怕報錯<br>
+            ✔ 修改別人的範例<br><br>
+
+            很多高手都是從一直 Debug 開始的。
+            `,
+
+            `
+            程式設計其實像在解決問題。<br><br>
+
+            <b>💡 方法：</b><br>
+            1️⃣ 先理解問題<br>
+            2️⃣ 拆解步驟<br>
+            3️⃣ 用程式完成<br><br>
+
+            慢慢練習會越來越熟悉。
+            `,
+
+            `
+            新手常見問題是一次學太多。<br><br>
+
+            <b>🎯 建議：</b><br>
+            每天學一點，
+            比一次學很久更有效。
+            `
+        ];
+
+        const randomReply =
+        codingReplies[Math.floor(Math.random()*codingReplies.length)];
+
         return `
-<b>💻 程式學習建議</b><br><br>
-
-<b>📌 推薦流程：</b><br>
-1️⃣ 先學基礎<br>
-2️⃣ 修改範例<br>
-3️⃣ 練習小專案<br>
-4️⃣ 修正錯誤<br><br>
-
-<b>💡 重點：</b><br>
-不要害怕報錯，
-工程師每天都在修 Bug。
-`;
+        <b>${opening}</b><br><br>
+        ${randomReply}<br><br>
+        <b>${ending}</b>
+        `;
     }
 
-    // 通用
+    // ===================== AI =====================
+
+    if(text.includes("AI") || text.includes("ai")){
+
+        const aiReplies = [
+
+            `
+            AI 是讓電腦模擬人類思考的技術。<br><br>
+
+            <b>📌 AI 可以做：</b><br>
+            ✔ 問答<br>
+            ✔ 圖片生成<br>
+            ✔ 資料分析<br>
+            ✔ 翻譯
+            `,
+
+            `
+            現在很多工作都開始使用 AI。<br><br>
+
+            <b>💡 常見 AI：</b><br>
+            • ChatGPT<br>
+            • Gemini<br>
+            • Midjourney<br><br>
+
+            學會使用 AI 可以提升效率。
+            `,
+
+            `
+            AI 發展速度非常快。<br><br>
+
+            <b>📚 建議：</b><br>
+            可以先學「怎麼使用 AI 工具」，
+            再慢慢研究原理。
+            `
+        ];
+
+        const randomReply =
+        aiReplies[Math.floor(Math.random()*aiReplies.length)];
+
+        return `
+        <b>${opening}</b><br><br>
+        ${randomReply}<br><br>
+        <b>${ending}</b>
+        `;
+    }
+
+    // ===================== 一般回答 =====================
+
+    const normalReplies = [
+
+        `
+        我有整理出幾個重點：<br><br>
+
+        ✔ 先確認問題核心<br>
+        ✔ 一步一步解決<br>
+        ✔ 不要一次做太多
+        `,
+
+        `
+        這個問題其實可以拆解處理。<br><br>
+
+        <b>📌 建議：</b><br>
+        先完成最簡單的部分，
+        再慢慢優化。
+        `,
+
+        `
+        很多問題不是太難，
+        而是資訊太多。<br><br>
+
+        <b>💡 方法：</b><br>
+        把事情拆小會更容易完成。
+        `
+    ];
+
+    const randomReply =
+    normalReplies[Math.floor(Math.random()*normalReplies.length)];
+
     return `
-<b>🧠 AI 分析結果</b><br><br>
+    <b>${opening}</b><br><br>
 
-你輸入的內容：<br>
-「${text}」<br><br>
+    你輸入的內容：<br>
+    「${text}」<br><br>
 
-<b>📌 建議：</b><br>
-1️⃣ 先確認問題核心<br>
-2️⃣ 拆解步驟<br>
-3️⃣ 一步一步完成<br><br>
+    ${randomReply}<br><br>
 
-<b>💡 小技巧：</b><br>
-把大問題拆小，
-通常會更容易解決。<br><br>
-
-<b>🎯 結論：</b><br>
-持續練習與修正，
-會讓成果越來越好。
-`;
+    <b>${ending}</b>
+    `;
 }
-
 // ===================== AI 語氣系統 =====================
 
 function applyTone(text){
